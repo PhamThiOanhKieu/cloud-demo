@@ -1,0 +1,13 @@
+<div class="container mt-4">
+  <h2>Danh mục: <%= name %></h2>
+
+  <% posts.forEach((p, i) => { %>
+    <div class="card mb-3">
+      <img src="<%= p.image %>" class="card-img-top">
+      <div class="card-body">
+        <h5><%= p.title %></h5>
+        <a href="/posts/<%= i %>">Đọc tiếp</a>
+      </div>
+    </div>
+  <% }) %>
+</div>

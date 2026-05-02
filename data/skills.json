@@ -1,0 +1,32 @@
+[
+  {
+    "slug": "cloud-practitioner",
+    "title": "Cloud Practitioner",
+    "content": "AWS Cloud Practitioner là chứng chỉ nền tảng giúp bạn hiểu về điện toán đám mây AWS, EC2, S3, IAM, Billing và bảo mật cloud.",
+    "course": "AWS Cloud Bootcamp"
+  },
+  {
+    "slug": "javascript",
+    "title": "JavaScript",
+    "content": "JavaScript là ngôn ngữ lập trình phổ biến dùng để xây dựng website động, frontend ReactJS và backend NodeJS.",
+    "course": "JavaScript Mastery"
+  },
+  {
+    "_id": 1777644708986,
+    "title": "Phát triển web",
+    "category": "Phát triển web",
+    "content": "Các khóa học về Phát triển web dạy các kỹ năng cơ bản để tạo và duy trì trang web. Các khóa học này bao gồm các chủ đề như xây dựng các trang web hấp dẫn và chức năng, nguyên tắc thiết kế web và thiết kế UX/UI, những kỹ năng cần thiết cho các nghề nghiệp trong thiết kế web, phát triển và UX/UI"
+  },
+  {
+    "_id": 1777648895116,
+    "title": "Full Stack Web Developer Career Accelerator",
+    "category": "Chứng chỉ AWS",
+    "content": "Sự nghiệp phát triển web full stack của bạn bắt đầu từ đây. Học tập nhanh chóng và chuẩn bị phỏng vấn hiệu quả. Phát triển kỹ năng theo tốc độ của riêng bạn. Mở rộng tiềm năng thu nhập."
+  },
+  {
+    "_id": 1777650656282,
+    "title": "Project Management Certification Courses",
+    "category": "Chứng chỉ AWS",
+    "content": "Lập kế hoạch, thực hiện và giám sát dự án hiệu quả với Chứng chỉ Quản lý Dự án của Bright Academy. Nắm vững quản lý vòng đời dự án, phân bổ nguồn lực, quản lý rủi ro và truyền đạt thông tin để đáp ứng thành công các mục tiêu và ràng buộc của dự án."
+  }
+]

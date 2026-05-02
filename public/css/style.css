@@ -1,0 +1,31 @@
+body{
+    background:#f6f7fb;
+    font-family:Arial;
+}
+
+.logo{
+    font-size:32px;
+    font-weight:700;
+    color:#5624d0 !important;
+}
+
+.search-box{
+    width:40%;
+}
+
+.avatar{
+    width:40px;
+    height:40px;
+    border-radius:50%;
+}
+
+.footer{
+    background:#111;
+    color:white;
+    margin-top:80px;
+    padding:60px 0;
+}
+
+.footer p{
+    color:#ccc;
+}

@@ -1,0 +1,20 @@
+[
+  {
+    "_id": 1,
+    "title": "NodeJS Master",
+    "description": "Học backend từ A-Z với NodeJS",
+    "image": "https://picsum.photos/500/300?1"
+  },
+  {
+    "_id": 2,
+    "title": "Python AI",
+    "description": "Machine Learning cơ bản",
+    "image": "https://picsum.photos/500/300?2"
+  },
+  {
+    "_id": 1777643140764,
+    "title": "Khóa học về Chứng chỉ Amazon Web Services (AWS)",
+    "description": "Đào tạo và chứng chỉ Amazon Web Services (AWS) cấp chứng chỉ cho các chuyên gia trong nhiều sản phẩm và giải pháp đám mây của Amazon Web Services, từ chuyên gia đám mây đến chuyên gia học máy. AWS có nhiều chứng chỉ đáp ứng nhiều cấp độ kỹ năng liên quan đến đám mây, từ người mới bắt đầu đến chuyên gia nâng cao.",
+    "image": "/uploads/1777643140275.png"
+  }
+]

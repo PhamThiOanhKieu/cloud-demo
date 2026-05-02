@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Chỉnh sửa khóa học</title>
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<style>
+body{
+  background:#f5f7fb;
+  font-family:Arial;
+}
+
+.topbar{
+  background:white;
+  padding:20px;
+  margin-bottom:30px;
+  box-shadow:0 2px 10px rgba(0,0,0,0.08);
+}
+
+.form-box{
+  background:white;
+  padding:35px;
+  border-radius:16px;
+  box-shadow:0 2px 12px rgba(0,0,0,0.08);
+}
+
+.preview-img{
+  width:100%;
+  max-width:300px;
+  border-radius:10px;
+  margin-top:10px;
+}
+</style>
+
+</head>
+
+<body>
+
+<!-- TOPBAR -->
+<div class="topbar">
+  <div class="container d-flex justify-content-between align-items-center">
+
+    <h4 class="m-0">✏️ Chỉnh sửa khóa học</h4>
+
+    <div class="d-flex gap-2">
+      <a href="/admin/dashboard" class="btn btn-outline-secondary">
+        ← Dashboard
+      </a>
+
+      <a href="/admin/logout" class="btn btn-dark">
+        Đăng xuất
+      </a>
+    </div>
+
+  </div>
+</div>
+
+<!-- FORM -->
+<div class="container">
+
+  <div class="form-box">
+
+    <form
+      method="POST"
+      action="/admin/edit-course/<%= course._id %>"
+      enctype="multipart/form-data"
+    >
+
+      <!-- TITLE -->
+      <label class="form-label">Tên khóa học</label>
+      <input
+        name="title"
+        value="<%= course.title %>"
+        class="form-control mb-3"
+        required
+      >
+
+      <!-- DESCRIPTION -->
+      <label class="form-label">Mô tả</label>
+      <textarea
+        name="description"
+        class="form-control mb-3"
+        rows="5"
+        required
+      ><%= course.description %></textarea>
+
+      <!-- IMAGE -->
+      <label class="form-label">Ảnh mới</label>
+      <input
+        type="file"
+        name="image"
+        class="form-control mb-2"
+        onchange="previewImage(event)"
+      >
+
+      <!-- CURRENT IMAGE -->
+      <p class="text-muted mt-2 mb-1">Ảnh hiện tại:</p>
+      <img
+        id="preview"
+        src="<%= course.image %>"
+        class="preview-img"
+      >
+
+      <!-- BUTTON -->
+      <div class="d-flex gap-2 mt-4">
+
+        <button class="btn btn-success">
+          💾 Lưu thay đổi
+        </button>
+
+        <a href="/admin/dashboard" class="btn btn-outline-dark">
+          Hủy
+        </a>
+
+      </div>
+
+    </form>
+
+  </div>
+
+</div>
+
+<!-- SCRIPT PREVIEW IMAGE -->
+<script>
+function previewImage(event){
+  const img = document.getElementById("preview");
+  img.src = URL.createObjectURL(event.target.files[0]);
+}
+</script>
+
+</body>
+</html>

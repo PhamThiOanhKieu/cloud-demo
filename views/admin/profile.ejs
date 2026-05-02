@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+
+<meta charset="UTF-8">
+
+<title>Hồ sơ Admin</title>
+
+<link
+href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+rel="stylesheet">
+
+<link
+rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+<style>
+
+body{
+    background:#f5f7fb;
+    font-family:Arial;
+}
+
+.profile-box{
+    background:white;
+    border-radius:20px;
+    padding:40px;
+    box-shadow:0 2px 10px rgba(0,0,0,0.08);
+}
+
+.avatar{
+    width:120px;
+    height:120px;
+    border-radius:50%;
+    object-fit:cover;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="container mt-5">
+
+<div class="d-flex justify-content-between mb-4">
+
+<h1>
+
+<i class="fa-solid fa-user-shield"></i>
+ Hồ sơ Admin
+
+</h1>
+
+<a href="/admin/dashboard" class="btn btn-dark">
+
+Quay lại Dashboard
+
+</a>
+
+</div>
+
+<div class="profile-box">
+
+<div class="text-center mb-4">
+
+<img
+src="https://i.pravatar.cc/200"
+class="avatar">
+
+</div>
+
+<form>
+
+<div class="row">
+
+<div class="col-md-6 mb-3">
+
+<label>Tên Admin</label>
+
+<input
+type="text"
+class="form-control"
+value="Administrator">
+
+</div>
+
+<div class="col-md-6 mb-3">
+
+<label>Email</label>
+
+<input
+type="email"
+class="form-control"
+value="admin@brightacademy.com">
+
+</div>
+
+<div class="col-md-6 mb-3">
+
+<label>Số điện thoại</label>
+
+<input
+type="text"
+class="form-control"
+value="0123456789">
+
+</div>
+
+<div class="col-md-6 mb-3">
+
+<label>Mật khẩu</label>
+
+<input
+type="password"
+class="form-control"
+value="123456">
+
+</div>
+
+</div>
+
+<button class="btn btn-primary">
+
+Lưu thay đổi
+
+</button>
+
+</form>
+
+</div>
+
+</div>
+
+</body>
+</html>

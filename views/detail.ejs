@@ -1,0 +1,11 @@
+<div class="container mt-4">
+  <img src="<%= post.image %>" class="img-fluid mb-3">
+  <h1><%= post.title %></h1>
+  <p><%= post.content %></p>
+
+  <form method="POST" action="/posts/<%= id %>?_method=DELETE">
+    <button class="btn btn-danger">Xóa</button>
+  </form>
+
+  <a href="/" class="btn btn-secondary mt-2">Trang chủ</a>
+</div>
