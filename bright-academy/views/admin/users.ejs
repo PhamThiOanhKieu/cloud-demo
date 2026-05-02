@@ -1,0 +1,130 @@
+<%- include('../layouts/header') %>
+
+<div class="container py-5">
+
+    <h1 class="mb-4">
+
+        Quản lý người dùng
+
+    </h1>
+
+    <table class="table table-bordered bg-white shadow">
+
+        <thead class="table-dark">
+
+            <tr>
+
+                <th>ID</th>
+
+                <th>Họ tên</th>
+
+                <th>Email</th>
+
+                <th>Role</th>
+
+                <th>Status</th>
+
+                <th>Hành động</th>
+
+            </tr>
+
+        </thead>
+
+        <tbody>
+
+            <% users.forEach(user=>{ %>
+
+                <tr>
+
+                    <td>
+                        <%= user.id %>
+                    </td>
+
+                    <td>
+                        <%= user.fullname %>
+                    </td>
+
+                    <td>
+                        <%= user.email %>
+                    </td>
+
+                    <td>
+                        <%= user.role %>
+                    </td>
+
+                    <td>
+
+                        <% if(user.status === 'blocked'){ %>
+
+                            <span class="badge bg-danger">
+
+                                Blocked
+
+                            </span>
+
+                        <% } else { %>
+
+                            <span class="badge bg-success">
+
+                                Active
+
+                            </span>
+
+                        <% } %>
+
+                    </td>
+
+                    <td class="d-flex gap-2 flex-wrap">
+
+                        <% if(user.status === 'active'){ %>
+
+                            <a
+                                href="/admin/user/block/<%= user.id %>"
+                                class="btn btn-warning btn-sm"
+                            >
+                                Block
+                            </a>
+
+                        <% } else { %>
+
+                            <a
+                                href="/admin/user/unblock/<%= user.id %>"
+                                class="btn btn-success btn-sm"
+                            >
+                                Unblock
+                            </a>
+
+                        <% } %>
+
+                        <% if(user.role !== 'teacher'){ %>
+
+                            <a
+                                href="/admin/user/make-teacher/<%= user.id %>"
+                                class="btn btn-primary btn-sm"
+                            >
+                                Teacher
+                            </a>
+
+                        <% } %>
+
+                        <a
+                            href="/admin/user/delete/<%= user.id %>"
+                            class="btn btn-danger btn-sm"
+                            onclick="return confirm('Xóa user này?')"
+                        >
+                            Delete
+                        </a>
+
+                    </td>
+
+                </tr>
+
+            <% }) %>
+
+        </tbody>
+
+    </table>
+
+</div>
+
+<%- include('../layouts/footer') %>

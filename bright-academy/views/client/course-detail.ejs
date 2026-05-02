@@ -1,0 +1,19 @@
+<%- include('../layouts/header') %>
+
+<div class="detail">
+
+    <img src="<%= course.image %>" width="400">
+
+    <h1><%= course.title %></h1>
+
+    <p><%= course.description %></p>
+
+    <h2><%= course.price %> VNĐ</h2>
+
+    <form action="/cart/add/<%= course.id %>" method="POST">
+        <button>Add To Cart</button>
+    </form>
+
+</div>
+
+<%- include('../layouts/footer') %>

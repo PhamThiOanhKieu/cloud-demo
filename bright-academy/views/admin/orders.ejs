@@ -1,0 +1,49 @@
+<%- include('../layouts/header') %>
+
+<div class="container py-5">
+
+<h1 class="mb-4">
+
+Quản lý đơn hàng
+
+</h1>
+
+<table class="table table-bordered">
+
+<tr>
+
+<th>ID</th>
+
+<th>User</th>
+
+<th>Course</th>
+
+<th>Tổng tiền</th>
+
+<th>Trạng thái</th>
+
+</tr>
+
+<% orders.forEach(o=>{ %>
+
+<tr>
+
+<td><%= o.id %></td>
+
+<td><%= o.user_id %></td>
+
+<td><%= o.course_id %></td>
+
+<td><%= o.total_price %> VNĐ</td>
+
+<td><%= o.status %></td>
+
+</tr>
+
+<% }) %>
+
+</table>
+
+</div>
+
+<%- include('../layouts/footer') %>

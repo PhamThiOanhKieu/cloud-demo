@@ -1,0 +1,45 @@
+<%- include('../layouts/header') %>
+
+<div class="container py-5">
+
+<h1>
+
+Quản lý chứng chỉ
+
+</h1>
+
+<table class="table table-bordered">
+
+<tr>
+
+<th>ID</th>
+
+<th>User</th>
+
+<th>Course</th>
+
+<th>Mã chứng chỉ</th>
+
+</tr>
+
+<% certificates.forEach(c=>{ %>
+
+<tr>
+
+<td><%= c.id %></td>
+
+<td><%= c.user_id %></td>
+
+<td><%= c.course_id %></td>
+
+<td><%= c.certificate_code %></td>
+
+</tr>
+
+<% }) %>
+
+</table>
+
+</div>
+
+<%- include('../layouts/footer') %>

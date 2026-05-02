@@ -1,0 +1,42 @@
+<%- include('../layouts/header') %>
+
+<div class="container py-5">
+
+<h1 class="mb-4">
+
+Quản lý banner
+
+</h1>
+
+<div class="row">
+
+<% banners.forEach(b=>{ %>
+
+<div class="col-md-6 mb-4">
+
+<div class="card">
+
+<img
+src="<%= b.image %>"
+class="card-img-top"
+height="250"
+style="object-fit:cover;"
+>
+
+<div class="card-body">
+
+<h5><%= b.title %></h5>
+
+</div>
+
+</div>
+
+</div>
+
+<% }) %>
+
+</div>
+
+</div>
+
+<%- include('../layouts/footer') %>

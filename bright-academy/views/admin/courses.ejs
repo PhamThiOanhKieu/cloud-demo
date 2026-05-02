@@ -1,0 +1,105 @@
+<%- include('../layouts/header') %>
+
+<div class="container py-5">
+
+    <div class="d-flex justify-content-between mb-4">
+
+        <h1>
+
+            Quản lý khóa học
+
+        </h1>
+
+        <a
+            href="/admin/course/create"
+            class="btn btn-primary"
+        >
+            Tạo khóa học
+        </a>
+
+    </div>
+
+    <table class="table table-bordered bg-white shadow">
+
+        <thead class="table-dark">
+
+            <tr>
+
+                <th>ID</th>
+
+                <th>Thumbnail</th>
+
+                <th>Tên khóa học</th>
+
+                <th>Giảng viên</th>
+
+                <th>Giá</th>
+
+                <th>Danh mục</th>
+
+                <th>Hành động</th>
+
+            </tr>
+
+        </thead>
+
+        <tbody>
+
+            <% courses.forEach(course=>{ %>
+
+                <tr>
+
+                    <td><%= course.id %></td>
+
+                    <td>
+
+                        <img
+                            src="<%= course.thumbnail %>"
+                            width="120"
+                            class="rounded"
+                        >
+
+                    </td>
+
+                    <td><%= course.title %></td>
+
+                    <td>
+
+                        <%= course.teacher_name || 'Chưa có' %>
+
+                    </td>
+
+                    <td><%= course.price %> VNĐ</td>
+
+                    <td><%= course.category %></td>
+
+                    <td class="d-flex gap-2">
+
+                        <a
+                            href="/admin/course/edit/<%= course.id %>"
+                            class="btn btn-warning btn-sm"
+                        >
+                            Sửa
+                        </a>
+
+                        <a
+                            href="/admin/course/delete/<%= course.id %>"
+                            class="btn btn-danger btn-sm"
+                            onclick="return confirm('Xóa khóa học này?')"
+                        >
+                            Xóa
+                        </a>
+
+                    </td>
+
+                </tr>
+
+            <% }) %>
+
+        </tbody>
+
+    </table>
+
+</div>
+
+<%- include('../layouts/footer') %>

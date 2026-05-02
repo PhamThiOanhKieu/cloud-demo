@@ -1,0 +1,41 @@
+<%- include('../layouts/header') %>
+
+<div class="container py-5">
+
+<h1 class="mb-4">
+
+Quản lý giảng viên
+
+</h1>
+
+<table class="table table-bordered">
+
+<tr>
+
+<th>ID</th>
+
+<th>Họ tên</th>
+
+<th>Email</th>
+
+</tr>
+
+<% teachers.forEach(t=>{ %>
+
+<tr>
+
+<td><%= t.id %></td>
+
+<td><%= t.fullname %></td>
+
+<td><%= t.email %></td>
+
+</tr>
+
+<% }) %>
+
+</table>
+
+</div>
+
+<%- include('../layouts/footer') %>

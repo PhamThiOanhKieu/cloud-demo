@@ -1,0 +1,31 @@
+<%- include('../layouts/header') %>
+
+<h1>Your Cart</h1>
+
+<table border="1">
+
+    <tr>
+        <th>Course</th>
+        <th>Price</th>
+        <th>Quantity</th>
+        <th>Subtotal</th>
+    </tr>
+
+    <% cartItems.forEach(item => { %>
+
+        <tr>
+            <td><%= item.title %></td>
+            <td><%= item.price %></td>
+            <td><%= item.quantity %></td>
+            <td><%= item.subtotal %></td>
+        </tr>
+
+    <% }) %>
+
+</table>
+
+<h2>Total: <%= total %> VNĐ</h2>
+
+<button>Checkout</button>
+
+<%- include('../layouts/footer') %>
