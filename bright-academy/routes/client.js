@@ -1,77 +1,76 @@
 const express = require('express');
 const router = express.Router();
+const db = require('../config/db');
 
-const fs = require('fs');
-const path = require('path');
+// =====================
+// TRANG CHỦ - HIỂN THỊ KHÓA HỌC
+// =====================
+router.get('/', async (req, res) => {
+  try {
+    const [courses] = await db.query("SELECT * FROM courses");
 
-const courses = JSON.parse(
-    fs.readFileSync(
-        path.join(__dirname, '../data/courses.json')
-    )
-);
+    res.render('client/home', { courses });
 
-router.get('/', (req, res) => {
-
-    res.render('client/home', {
-        courses
-    });
+  } catch (err) {
+    console.log(err);
+    res.send('Lỗi load khóa học');
+  }
 });
 
-router.get('/course/:id', (req, res) => {
+router.get('/', async (req, res) => {
+  const [courses] = await db.query(`
+    SELECT courses.*, users.fullname AS teacher_name
+    FROM courses
+    LEFT JOIN users ON courses.teacher_id = users.id
+    WHERE courses.status = 'approved'
+  `);
 
-    const course = courses.find(
-        c => c.id == req.params.id
-    );
-
-    res.render('client/course-detail', {
-        course
-    });
+  res.render('client/home', { courses });
 });
 
-router.post('/cart/add/:id', (req, res) => {
+// Đăng ký làm giảng viên
 
-    const courseId = req.params.id;
+router.post('/become-teacher', async (req, res) => {
 
-    const existing = req.session.cart.find(
-        item => item.courseId == courseId
+  if (!req.session.user) {
+    return res.redirect('/login');
+  }
+
+  const { teaching_exp, video_exp, audience } = req.body;
+
+  await db.query(
+    `UPDATE users 
+     SET teacher_request=1, teaching_exp=?, video_exp=?, audience=? 
+     WHERE id=?`,
+    [teaching_exp, video_exp, audience, req.session.user.id]
+  );
+
+  res.send('Đã gửi yêu cầu! Chờ admin duyệt.');
+});
+// =====================
+// CHI TIẾT KHÓA HỌC
+// =====================
+router.get('/course/:id', async (req, res) => {
+  const id = req.params.id;
+
+  try {
+    const [rows] = await db.query(
+      "SELECT * FROM courses WHERE id = ?",
+      [id]
     );
 
-    if(existing){
-        existing.quantity += 1;
-    } else {
-        req.session.cart.push({
-            courseId,
-            quantity: 1
-        });
+    if (rows.length === 0) {
+      return res.send('Không tìm thấy khóa học');
     }
 
-    res.redirect('/cart');
-});
-
-router.get('/cart', (req, res) => {
-
-    const cartItems = req.session.cart.map(item => {
-
-        const course = courses.find(
-            c => c.id == item.courseId
-        );
-
-        return {
-            ...course,
-            quantity: item.quantity,
-            subtotal: course.price * item.quantity
-        };
+    res.render('client/course-detail', {
+      course: rows[0]
     });
 
-    const total = cartItems.reduce(
-        (sum, item) => sum + item.subtotal,
-        0
-    );
-
-    res.render('client/cart', {
-        cartItems,
-        total
-    });
+  } catch (err) {
+    console.log(err);
+    res.send('Lỗi');
+  }
 });
 
 module.exports = router;

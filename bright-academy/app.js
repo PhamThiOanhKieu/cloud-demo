@@ -1,51 +1,56 @@
 const express = require('express');
-
 const session = require('express-session');
-
 const path = require('path');
 
 const authRoutes = require('./routes/auth');
-
 const adminRoutes = require('./routes/admin');
+const teacherRoutes = require('./routes/teacher');
+const clientRoutes = require('./routes/client');
 
 const app = express();
 
+// TRUST PROXY (quan trọng nếu chạy server)
+app.set('trust proxy', 1);
+
+// VIEW ENGINE
 app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname, 'views'));
 
-app.use(express.urlencoded({ extended:true }));
+// STATIC + BODY
+app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.urlencoded({ extended: true }));
 
-app.use(express.static('public'));
-
+// ✅ SESSION (QUAN TRỌNG NHẤT)
 app.use(session({
-
-    secret:'brightacademy',
-
-    resave:false,
-
-    saveUninitialized:false
-
+  secret: 'brightacademy',
+  resave: false,
+  saveUninitialized: true,
+  cookie: {
+    secure: false,      // phải false nếu dùng http
+    httpOnly: true,
+    sameSite: 'lax'
+  }
 }));
 
-app.use((req,res,next)=>{
-
-    res.locals.user = req.session.user || null;
-
-    next();
-
+// DEBUG SESSION
+app.use((req, res, next) => {
+  console.log("SESSION USER:", req.session.user);
+  next();
 });
 
-app.use('/',authRoutes);
-
-app.use('/',adminRoutes);
-
-app.get('/',(req,res)=>{
-
-    res.render('client/home');
-
+// USER GLOBAL
+app.use((req, res, next) => {
+  res.locals.user = req.session.user || null;
+  next();
 });
 
-app.listen(3000,()=>{
+// ROUTES (GIỮ NGUYÊN)
+app.use('/', authRoutes);
+app.use('/admin', adminRoutes);
+app.use('/teacher', teacherRoutes);
+app.use('/', clientRoutes);
 
-    console.log('Server running');
-
+// START SERVER
+app.listen(3000, () => {
+  console.log('Server chạy tại http://localhost:3000');
 });

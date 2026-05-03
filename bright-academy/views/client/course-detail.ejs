@@ -1,19 +1,27 @@
 <%- include('../layouts/header') %>
 
-<div class="detail">
+<div class="container mt-5">
 
-    <img src="<%= course.image %>" width="400">
+  <h2><%= course.title %></h2>
+  <p><%= course.description %></p>
+  <p><b><%= course.price %> VND</b></p>
 
-    <h1><%= course.title %></h1>
-
-    <p><%= course.description %></p>
-
-    <h2><%= course.price %> VNĐ</h2>
-
-    <form action="/cart/add/<%= course.id %>" method="POST">
-        <button>Add To Cart</button>
-    </form>
+  <form action="/cart/add/<%= course.id %>" method="POST" onsubmit="return checkLogin()">
+    <button class="btn btn-success">Thêm vào giỏ</button>
+  </form>
 
 </div>
+
+<script>
+function checkLogin() {
+  const isLoggedIn = "<%= user ? true : false %>";
+
+  if (!isLoggedIn) {
+    alert("Vui lòng đăng ký/đăng nhập vào tài khoản của bạn");
+    window.location.href = "/login";
+    return false;
+  }
+}
+</script>
 
 <%- include('../layouts/footer') %>

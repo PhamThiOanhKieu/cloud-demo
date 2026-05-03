@@ -1,11 +1,16 @@
 const express = require('express');
 const router = express.Router();
+const db = require('../config/db');
+const { isTeacher } = require('../middleware/auth');
 
-const isTeacher = require('../middleware/teacher');
+// dashboard teacher
+router.get('/teacher', isTeacher, async (req, res) => {
+  const [courses] = await db.query(
+    "SELECT * FROM courses WHERE teacher_id=?",
+    [req.session.user.id]
+  );
 
-router.get('/dashboard', isTeacher, (req, res) => {
-
-    res.render('teacher/dashboard');
+  res.render('teacher/dashboard', { courses });
 });
 
 module.exports = router;

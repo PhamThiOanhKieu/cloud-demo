@@ -1,47 +1,39 @@
 <%- include('../layouts/header') %>
 
 <div class="container mt-5">
+  <div class="row justify-content-center">
+    <div class="col-lg-5">
+      <div class="card p-4 shadow">
 
-    <div class="row justify-content-center">
+        <h2 class="mb-4">Đăng nhập</h2>
 
-        <div class="col-lg-5">
+        <form action="/login" method="POST">
 
-            <div class="card p-4 shadow">
+          <input
+            type="email"
+            name="email"
+            class="form-control mb-3"
+            placeholder="Email"
+            required
+          >
 
-                <h2 class="mb-4">
-                    Đăng nhập
-                </h2>
+          <input
+            type="password"
+            name="password"
+            class="form-control mb-3"
+            placeholder="Mật khẩu"
+            required
+          >
 
-                <form method="POST">
+          <button class="btn btn-dark w-100">
+            Login
+          </button>
 
-                    <input
-                        type="email"
-                        name="email"
-                        class="form-control mb-3"
-                        placeholder="Email"
-                    >
+        </form>
 
-                    <input
-                        type="password"
-                        name="password"
-                        class="form-control mb-3"
-                        placeholder="Mật khẩu"
-                    >
-
-                    <button
-                        class="btn btn-dark w-100"
-                    >
-                        Login
-                    </button>
-
-                </form>
-
-            </div>
-
-        </div>
-
+      </div>
     </div>
-
+  </div>
 </div>
 
 <%- include('../layouts/footer') %>

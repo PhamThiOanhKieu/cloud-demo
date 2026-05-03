@@ -1,0 +1,36 @@
+<%- include('../layouts/header') %>
+
+<div class="container mt-5">
+  <h2>Tạo khóa học</h2>
+
+  <form action="/admin/course/create" method="POST" enctype="multipart/form-data">
+
+    <input type="text" name="title" placeholder="Tên khóa học" class="form-control mb-3" required>
+
+    <input type="number" name="price" placeholder="Giá" class="form-control mb-3" required>
+
+    <textarea name="description" placeholder="Mô tả" class="form-control mb-3"></textarea>
+
+    <!-- UPLOAD ẢNH -->
+    <input type="file" name="thumbnail" class="form-control mb-3">
+
+    <!-- PREVIEW -->
+    <img id="preview" style="width:200px; display:none; margin-bottom:10px;" />
+
+    <button class="btn btn-primary">Tạo khóa học</button>
+
+  </form>
+</div>
+
+<script>
+document.querySelector('input[name="thumbnail"]').addEventListener('change', function(e) {
+  const file = e.target.files[0];
+  if (file) {
+    const preview = document.getElementById('preview');
+    preview.src = URL.createObjectURL(file);
+    preview.style.display = 'block';
+  }
+});
+</script>
+
+<%- include('../layouts/footer') %>

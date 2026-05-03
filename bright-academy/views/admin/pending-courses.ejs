@@ -1,0 +1,77 @@
+<%- include('../layouts/header') %>
+
+<div class="container mt-5">
+  <h2 class="mb-4">Khóa học chờ duyệt</h2>
+
+  <% if (!courses || courses.length === 0) { %>
+    <p>Không có khóa học nào chờ duyệt.</p>
+  <% } else { %>
+
+    <div class="row">
+
+      <% courses.forEach(c => { %>
+
+        <div class="col-md-4">
+          <div class="card mb-4 shadow-sm h-100">
+
+            <!-- ẢNH -->
+            <img 
+              src="<%= c.thumbnail 
+                        ? (c.thumbnail.startsWith('http') 
+                            ? c.thumbnail 
+                            : '/uploads/' + c.thumbnail) 
+                        : '/uploads/default.jpg' %>" 
+              class="card-img-top"
+              style="height:180px; object-fit:cover;"
+            >
+
+            <div class="card-body d-flex flex-column">
+
+              <!-- TÊN -->
+              <h5 class="fw-bold">
+                <%= c.title %>
+              </h5>
+
+              <!-- GIẢNG VIÊN -->
+              <p class="text-muted mb-1">
+                Giảng viên ID: <%= c.teacher_id %>
+              </p>
+
+              <!-- GIÁ -->
+              <p class="text-danger fw-bold">
+                <%= Number(c.price).toLocaleString('vi-VN') %> VNĐ
+              </p>
+
+              <!-- TRẠNG THÁI -->
+              <span class="badge bg-warning mb-3">
+                Chờ duyệt
+              </span>
+
+              <!-- BUTTON -->
+              <div class="mt-auto">
+
+                <a href="/admin/course/approve/<%= c.id %>" 
+                   class="btn btn-success btn-sm w-100 mb-2">
+                  Duyệt
+                </a>
+
+                <a href="/admin/course/delete/<%= c.id %>" 
+                   class="btn btn-danger btn-sm w-100">
+                  Xóa
+                </a>
+
+              </div>
+
+            </div>
+
+          </div>
+        </div>
+
+      <% }) %>
+
+    </div>
+
+  <% } %>
+</div>
+
+<%- include('../layouts/footer') %>

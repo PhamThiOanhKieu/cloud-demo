@@ -1,7 +1,6 @@
 <%- include('../layouts/header') %>
 
 <h1>Teacher Dashboard</h1>
-
 <div class="dashboard-grid">
 
     <div class="card">
@@ -16,4 +15,12 @@
 
 </div>
 
+<h2>Khóa học của tôi</h2>
+
+<% courses.forEach(c => { %>
+  <div>
+    <h4><%= c.title %></h4>
+    <p>Trạng thái: <%= c.status %></p>
+  </div>
+<% }) %>
 <%- include('../layouts/footer') %>

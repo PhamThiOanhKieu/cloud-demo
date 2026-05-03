@@ -57,54 +57,35 @@ exports.courses = async (req,res)=>{
 
 };
 
-exports.createCoursePage = async (req,res)=>{
+// =====================
+// TRANG TẠO KHÓA HỌC
+// =====================
+exports.createCourse = async (req, res) => {
+  const title = req.body?.title;
+  const price = req.body?.price;
+  const description = req.body?.description;
 
-    const [teachers] = await db.query(
+  const thumbnail = req.file ? req.file.filename : null;
 
-        "SELECT * FROM users WHERE role='teacher'"
+  // 🔥 LẤY GIẢNG VIÊN TỪ SESSION
+  const teacher_id = req.session.user.id;
+  const teacher_name = req.session.user.fullname;
 
-    );
-
-    res.render('admin/createCourse',{
-
-        teachers
-
-    });
-
-};
-
-exports.createCourse = async (req,res)=>{
-
-    const {
-        title,
-        description,
-        thumbnail,
-        price,
-        category,
-        teacher_id
-    } = req.body;
-
+  try {
     await db.query(
-
-        `INSERT INTO courses
-        (title,description,thumbnail,price,category,teacher_id)
-        VALUES(?,?,?,?,?,?)`,
-
-        [
-            title,
-            description,
-            thumbnail,
-            price,
-            category,
-            teacher_id
-        ]
-
+      `INSERT INTO courses 
+      (title, price, description, thumbnail, teacher_id, teacher_name) 
+      VALUES (?, ?, ?, ?, ?, ?)`,
+      [title, price, description, thumbnail, teacher_id, teacher_name]
     );
 
     res.redirect('/admin/courses');
 
+  } catch (err) {
+    console.log(err);
+    res.send('Lỗi tạo khóa học');
+  }
 };
-
 exports.editCoursePage = async (req,res)=>{
 
     const id = req.params.id;
@@ -432,4 +413,68 @@ exports.teacherApproval = async (req,res)=>{
 
     });
 
+};
+// =====================
+// DASHBOARD
+// =====================
+exports.dashboard = (req, res) => {
+  res.send('Admin Dashboard');
+};
+
+// =====================
+// DANH SÁCH KHÓA HỌC
+// =====================
+exports.courses = async (req, res) => {
+  try {
+    const [courses] = await db.query("SELECT * FROM courses");
+    res.render('admin/courses', { courses });
+  } catch (err) {
+    console.log(err);
+    res.send('Lỗi load khóa học');
+  }
+};
+
+// =====================
+// PAGE TẠO KHÓA HỌC
+// =====================
+exports.createCoursePage = (req, res) => {
+  res.render('admin/create-course');
+};
+
+// khóa học chờ duyệt
+exports.pendingCourses = async (req, res) => {
+  const [courses] = await db.query(
+    "SELECT * FROM courses WHERE status='pending'"
+  );
+
+  res.render('admin/pending-courses', { courses });
+};
+
+// duyệt khóa học
+exports.approveCourse = async (req, res) => {
+  await db.query(
+    "UPDATE courses SET status='approved' WHERE id=?",
+    [req.params.id]
+  );
+
+  res.redirect('/admin/pending-courses');
+};
+
+// duyệt giảng viên
+exports.teacherApproval = async (req, res) => {
+  const [users] = await db.query(
+    "SELECT * FROM users WHERE teacher_request=1"
+  );
+
+  res.render('admin/teacher-approval', { users });
+};
+
+// duyệt giảng viên
+exports.approveTeacher = async (req, res) => {
+  await db.query(
+    "UPDATE users SET role='teacher', teacher_request=0 WHERE id=?",
+    [req.params.id]
+  );
+
+  res.redirect('/admin/teacher-approval');
 };

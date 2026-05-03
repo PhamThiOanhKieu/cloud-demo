@@ -1,18 +1,14 @@
 [
   {
     "id": 1,
-    "title": "AWS Cloud Practitioner",
-    "teacher": "Bright Academy",
-    "price": 499000,
-    "image": "/images/aws.jpg",
-    "description": "Learn AWS from zero to hero"
+    "title": "Khóa học React",
+    "description": "Học React từ cơ bản đến nâng cao",
+    "price": 500000
   },
   {
     "id": 2,
-    "title": "ReactJS Masterclass",
-    "teacher": "Bright Academy",
-    "price": 599000,
-    "image": "/images/react.jpg",
-    "description": "Build modern websites"
+    "title": "Kỹ năng Excel",
+    "description": "Excel cho dân văn phòng",
+    "price": 300000
   }
 ]
