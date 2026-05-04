@@ -3,7 +3,7 @@
 <div class="container mt-5">
   <h2 class="mb-4">Duyệt giảng viên</h2>
 
-  <% if (!users || users.length === 0) { %>
+  <% if (!requests || requests.length === 0) { %>
     <p>Không có yêu cầu nào.</p>
   <% } else { %>
 
@@ -17,13 +17,13 @@
         </tr>
       </thead>
       <tbody>
-        <% users.forEach(u => { %>
+        <% requests.forEach(r => { %>
           <tr>
-            <td><%= u.id %></td>
-            <td><%= u.fullname %></td>
-            <td><%= u.email %></td>
+            <td><%= r.id %></td>
+            <td><%= r.fullname %></td>
+            <td><%= r.email %></td>
             <td>
-              <a href="/admin/approve-teacher/<%= u.id %>" 
+              <a href="/admin/approve-teacher/<%= r.id %>"
                  class="btn btn-success btn-sm">
                 Duyệt
               </a>

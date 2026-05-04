@@ -1,88 +1,110 @@
 const db = require('../config/db');
+const bcrypt = require('bcrypt');
 
-// ===== LOGIN =====
+// LOGIN PAGE
 exports.showLogin = (req, res) => {
     res.render('auth/login');
 };
 
-exports.login = (req, res) => {
+// LOGIN
+exports.login = async (req, res) => {
     const { email, password } = req.body;
 
-    db.query(
-        "SELECT * FROM users WHERE email=? AND password=?",
-        [email, password],
-        (err, results) => {
+    try {
+        const [users] = await db.query(
+            "SELECT * FROM users WHERE email=?",
+            [email]
+        );
 
-            if (err) return res.send('Lỗi DB');
+        if (users.length === 0) {
+            return res.send('Sai email hoặc mật khẩu');
+        }
 
-            if (results.length === 0) {
-                return res.send('Sai tài khoản hoặc mật khẩu');
+        const user = users[0];
+
+        // ⚠️ nếu bạn CHƯA dùng bcrypt thì dùng tạm dòng dưới
+        // const isMatch = password === user.password;
+
+        // ✅ nếu có bcrypt thì dùng cái này
+        const isMatch = await bcrypt.compare(password, user.password);
+
+        if (!isMatch) {
+            return res.send('Sai email hoặc mật khẩu');
+        }
+
+        // 🔥 QUAN TRỌNG: LƯU SESSION
+        req.session.user = user;
+
+        req.session.save(() => {
+
+            // redirect theo role
+            if (user.role === 'teacher') {
+                return res.redirect('/dashboard'); // ❗ đã fix path
             }
 
-            const user = results[0];
-
-            req.session.user = user;
-
-            console.log("LOGIN OK:", user);
-
-            if (user.role === 'admin') return res.redirect('/admin');
-            if (user.role === 'teacher') return res.redirect('/teacher/dashboard');
+            if (user.role === 'admin') {
+                return res.redirect('/admin/dashboard');
+            }
 
             return res.redirect('/');
-        }
-    );
+        });
+
+    } catch (err) {
+        console.log(err);
+        res.send('Lỗi server');
+    }
 };
 
-// ===== REGISTER =====
+// REGISTER PAGE
 exports.showRegister = (req, res) => {
     res.render('auth/register');
 };
 
-exports.register = (req, res) => {
+// REGISTER
 
-    const { fullname, email, password } = req.body;
+exports.register = async (req, res) => {
+    try {
+        console.log("REGISTER HIT");
 
-    db.query(
-        "INSERT INTO users (fullname, email, password, role) VALUES (?, ?, ?, 'student')",
-        [fullname, email, password],
-        (err) => {
+        const { fullname, email, password } = req.body;
 
-            if (err) {
-                console.log(err);
-                return res.send('Email đã tồn tại');
-            }
-
-            res.redirect('/login');
+        if (!fullname || !email || !password) {
+            return res.send('Thiếu dữ liệu');
         }
-    );
+
+        // check email tồn tại
+        const [results] = await db.query(
+            "SELECT * FROM users WHERE email=?",
+            [email]
+        );
+
+        if (results.length > 0) {
+            return res.send('Email đã tồn tại');
+        }
+
+        // insert user
+        await db.query(
+            "INSERT INTO users (fullname, email, password, role) VALUES (?, ?, ?, 'student')",
+            [fullname, email, password]
+        );
+
+        // render thành công
+        return res.render('auth/result', {
+            message: 'Đăng ký thành công!',
+            type: 'success',
+            redirectUrl: '/login',
+            buttonText: 'Đăng nhập'
+        });
+
+    } catch (err) {
+        console.log("REGISTER ERROR:", err);
+        return res.send('Lỗi server');
+    }
 };
 
-// ===== LOGOUT =====
+// LOGOUT
 exports.logout = (req, res) => {
     req.session.destroy(() => {
         res.redirect('/login');
     });
-};
-// ===== REGISTER =====
-exports.showRegister = (req, res) => {
-    res.render('auth/register');
-};
-
-exports.register = (req, res) => {
-
-    const { fullname, email, password } = req.body;
-
-    db.query(
-        "INSERT INTO users (fullname, email, password, role) VALUES (?, ?, ?, 'student')",
-        [fullname, email, password],
-        (err) => {
-
-            if (err) {
-                console.log(err);
-                return res.send('Email đã tồn tại');
-            }
-
-            res.redirect('/login');
-        }
-    );
 };

@@ -29,15 +29,14 @@
 
             </a>
 
-            <form class="d-flex mx-auto w-50">
-
+            <form class="d-flex ms-3 me-auto" style="flex-grow: 1; max-width: 500px;">
                 <input class="form-control rounded-pill" type="search" placeholder="Tìm kiếm khóa học...">
 
             </form>
 
             <% if(user && user.role==='admin' ){ %>
 
-                <div class="dropdown">
+                <div class="dropdown ms-auto">
 
                     <button class="btn btn-warning dropdown-toggle" data-bs-toggle="dropdown">
 
@@ -105,9 +104,8 @@
 
                 <% } else { %>
 
-                    <div class="d-flex align-items-center gap-3">
-
-                        <a href="/become-teacher" class="text-white text-decoration-none">
+                 <div class="d-flex align-items-center gap-3 ms-auto">
+                        <a href="/teacher/become-teacher" class="text-white text-decoration-none">
                             Giảng dạy trên Bright Academy
                         </a>
 

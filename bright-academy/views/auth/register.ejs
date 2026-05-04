@@ -1,54 +1,32 @@
 <%- include('../layouts/header') %>
 
-<div class="container mt-5">
+<div class="container mt-5 mb-5">
+  <div class="row justify-content-center">
+    <div class="col-lg-4">
+      <div class="card p-4 shadow">
 
-    <div class="row justify-content-center">
+        <h3 class="text-center mb-4">Đăng ký</h3>
 
-        <div class="col-lg-5">
+        <form action="/register" method="POST">
 
-            <div class="card p-4 shadow">
+          <input type="text" name="fullname" class="form-control mb-3" placeholder="Họ tên" required>
 
-                <h2 class="mb-4">
-                    Đăng ký
-                </h2>
+          <input type="email" name="email" class="form-control mb-3" placeholder="Email" required>
 
-                <form method="POST">
+          <input type="password" name="password" class="form-control mb-3" placeholder="Mật khẩu" required>
 
-                    <input
-                        type="text"
-                        name="fullname"
-                        class="form-control mb-3"
-                        placeholder="Họ tên"
-                    >
+          <button class="btn btn-primary w-100">Đăng ký</button>
 
-                    <input
-                        type="email"
-                        name="email"
-                        class="form-control mb-3"
-                        placeholder="Email"
-                    >
+        </form>
 
-                    <input
-                        type="password"
-                        name="password"
-                        class="form-control mb-3"
-                        placeholder="Mật khẩu"
-                    >
-
-                    <button
-                        class="btn btn-primary w-100"
-                    >
-                        Đăng ký
-                    </button>
-
-                </form>
-
-            </div>
-
+        <div class="text-center mt-3">
+          <span>Đã có tài khoản?</span>
+          <a href="/login">Đăng nhập</a>
         </div>
 
+      </div>
     </div>
-
+  </div>
 </div>
 
 <%- include('../layouts/footer') %>

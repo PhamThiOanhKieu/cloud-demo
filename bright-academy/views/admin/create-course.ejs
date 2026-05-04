@@ -1,26 +1,51 @@
 <%- include('../layouts/header') %>
 
-<div class="container mt-5">
-  <h2>Tạo khóa học</h2>
+<main class="flex-fill">
+  <div class="container mt-5 mb-5">
 
-  <form action="/admin/course/create" method="POST" enctype="multipart/form-data">
+    <h2 class="mb-4">Tạo khóa học</h2>
 
-    <input type="text" name="title" placeholder="Tên khóa học" class="form-control mb-3" required>
+    <!-- HIỂN THỊ GIẢNG VIÊN -->
+    <% if (user) { %>
+      <div class="mb-3">
+        <label class="form-label fw-bold">Giảng viên</label>
+        <input 
+          type="text" 
+          class="form-control" 
+          value="<%= user.fullname %>" 
+          readonly
+        >
+      </div>
+    <% } %>
 
-    <input type="number" name="price" placeholder="Giá" class="form-control mb-3" required>
+    <!-- FORM -->
+    <form action="/teacher/create-course" method="POST" enctype="multipart/form-data">
 
-    <textarea name="description" placeholder="Mô tả" class="form-control mb-3"></textarea>
+      <input type="text" name="title" placeholder="Tên khóa học" class="form-control mb-3" required>
 
-    <!-- UPLOAD ẢNH -->
-    <input type="file" name="thumbnail" class="form-control mb-3">
+      <input type="number" name="price" placeholder="Giá" class="form-control mb-3" required>
 
-    <!-- PREVIEW -->
-    <img id="preview" style="width:200px; display:none; margin-bottom:10px;" />
+      <textarea name="description" placeholder="Mô tả" class="form-control mb-3"></textarea>
 
-    <button class="btn btn-primary">Tạo khóa học</button>
+      <!-- UPLOAD ẢNH -->
+      <input type="file" name="thumbnail" class="form-control mb-3">
 
-  </form>
-</div>
+      <!-- PREVIEW -->
+      <img id="preview" style="width:200px; display:none; margin-bottom:10px;" />
+
+      <!-- NÚT -->
+      <div class="d-flex gap-2">
+        <button class="btn btn-primary">Tạo khóa học</button>
+
+        <a href="/teacher/dashboard" class="btn btn-secondary">
+          Quay lại
+        </a>
+      </div>
+
+    </form>
+
+  </div>
+</main>
 
 <script>
 document.querySelector('input[name="thumbnail"]').addEventListener('change', function(e) {

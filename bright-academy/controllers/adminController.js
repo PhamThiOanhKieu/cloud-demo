@@ -218,22 +218,34 @@ exports.users = async(req,res)=>{
 
 };
 
-exports.teachers = async(req,res)=>{
+exports.teacherApproval = async (req, res) => {
+  const db = require('../config/db');
 
-    const [teachers] = await db.query(
-
-        "SELECT * FROM users WHERE role='teacher'"
-
+  try {
+    // lấy user đang xin làm giảng viên
+    const [users] = await db.query(
+      "SELECT * FROM users WHERE teacher_request = 1"
     );
 
-    res.render('admin/teachers',{
+    res.render('admin/teacher-approval', { users: requests});
 
-        teachers
-
-    });
-
+  } catch (err) {
+    console.log(err);
+    res.send('Lỗi load danh sách giảng viên');
+  }
 };
+exports.approveTeacher = async (req, res) => {
+  const db = require('../config/db');
 
+  const userId = req.params.id;
+
+  await db.query(
+    "UPDATE users SET role='teacher', teacher_request=0 WHERE id=?",
+    [userId]
+  );
+
+  res.redirect('/admin/teacher-approval');
+};
 exports.orders = (req,res)=>{
 
     const orders = [
@@ -378,76 +390,69 @@ exports.revenue = (req,res)=>{
 
 };
 
-exports.teacherApproval = async(req,res)=>{
+exports.teachers = async (req, res) => {
+    try {
+        const [teachers] = await db.query(
+            "SELECT * FROM users WHERE role='teacher'"
+        );
 
-    const [requests] = await db.query(
+        res.render('admin/teachers', { teachers });
 
-        `SELECT teacher_requests.*,
-        users.fullname,
-        users.email
-        FROM teacher_requests
-        LEFT JOIN users
-        ON teacher_requests.user_id = users.id`
-
-    );
-
-    res.render('admin/teacher-approval',{
-
-        requests
-
-    });
-
+    } catch (err) {
+        console.log(err);
+        res.send('Lỗi load giảng viên');
+    }
 };
 
-exports.approveTeacher = async(req,res)=>{
+exports.teacherApproval = async (req, res) => {
+    try {
+        const [requests] = await db.query(
+            `SELECT teacher_requests.*,
+                    users.fullname,
+                    users.email
+             FROM teacher_requests
+             LEFT JOIN users
+             ON teacher_requests.user_id = users.id`
+        );
 
-    try{
+        res.render('admin/teacher-approval', {
+            requests
+        });
 
+    } catch (error) {
+        console.log(error);
+        res.send('Lỗi load danh sách giảng viên');
+    }
+};
+exports.approveTeacher = async (req, res) => {
+    try {
         const id = req.params.id;
 
         const [requests] = await db.query(
-
             'SELECT * FROM teacher_requests WHERE id=?',
-
             [id]
-
         );
 
-        if(requests.length === 0){
-
+        if (requests.length === 0) {
             return res.send('Không tìm thấy yêu cầu');
-
         }
 
         const userId = requests[0].user_id;
 
         await db.query(
-
             "UPDATE users SET role='teacher' WHERE id=?",
-
             [userId]
-
         );
 
         await db.query(
-
-            `UPDATE teacher_requests
-            SET status='approved'
-            WHERE id=?`,
-
+            "UPDATE teacher_requests SET status='approved' WHERE id=?",
             [id]
-
         );
 
         res.redirect('/admin/teacher-approval');
 
-    }catch(error){
-
+    } catch (error) {
         console.log(error);
-
         res.send('Lỗi duyệt giảng viên');
-
     }
-
 };
-

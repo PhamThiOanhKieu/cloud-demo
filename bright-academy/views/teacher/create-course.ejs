@@ -1,8 +1,12 @@
 <%- include('../layouts/header') %>
 
-<div class="container mt-4">
+<div class="d-flex gap-2 mt-3">
+  <button class="btn btn-primary">Tạo khóa học</button>
 
-    <h3>Tạo khóa học</h3>
+  <a href="/teacher/dashboard" class="btn btn-secondary">
+    Quay lại
+  </a>
+</div>
 
     <form action="/teacher/create-course" method="POST">
 
@@ -21,6 +25,16 @@
             <input type="number" name="price" class="form-control">
         </div>
 
+        <div class="mb-3">
+  <label class="form-label fw-bold">Giảng viên</label>
+  <input 
+    type="text" 
+    class="form-control" 
+    value="<%= user.fullname %>" 
+    readonly
+  >
+</div>
+    
         <button class="btn btn-primary">Tạo khóa học</button>
 
     </form>
