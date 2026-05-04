@@ -1,15 +1,18 @@
 const db = require('../config/db');
 
-// ===== 1. DASHBOARD (Tổng quan) =====
+// ===== 1. DASHBOARD =====
 exports.dashboard = (req, res) => {
     const teacherId = req.session.user.id;
 
-    // Truy vấn lấy tổng số khóa học và tổng doanh thu (giả định có bảng orders)
     const sql = `
-        SELECT 
+        SELECT
             (SELECT COUNT(*) FROM courses WHERE teacher_id = ?) AS totalCourses,
-            (SELECT COUNT(*) FROM orders o JOIN courses c ON o.course_id = c.id WHERE c.teacher_id = ?) AS totalStudents,
-            (SELECT SUM(price) FROM orders o JOIN courses c ON o.course_id = c.id WHERE c.teacher_id = ?) AS totalRevenue
+            (SELECT COUNT(*) FROM orders o 
+                JOIN courses c ON o.course_id = c.id 
+                WHERE c.teacher_id = ?) AS totalStudents,
+            (SELECT SUM(c.price) FROM orders o 
+                JOIN courses c ON o.course_id = c.id 
+                WHERE c.teacher_id = ?) AS totalRevenue
     `;
 
     db.query(sql, [teacherId, teacherId, teacherId], (err, results) => {
@@ -17,6 +20,7 @@ exports.dashboard = (req, res) => {
             console.error(err);
             return res.status(500).send('Lỗi hệ thống');
         }
+
         res.render('teacher/dashboard', {
             stats: results[0],
             user: req.session.user
@@ -24,9 +28,10 @@ exports.dashboard = (req, res) => {
     });
 };
 
-// ===== 2. KHÓA HỌC CỦA TÔI (Danh sách) =====
+// ===== 2. KHÓA HỌC CỦA TÔI =====
 exports.myCourses = (req, res) => {
     const teacherId = req.session.user.id;
+
     const sql = "SELECT * FROM courses WHERE teacher_id = ?";
 
     db.query(sql, [teacherId], (err, results) => {
@@ -35,18 +40,22 @@ exports.myCourses = (req, res) => {
     });
 };
 
-// ===== 3. TẠO KHÓA HỌC (Hiển thị Form) =====
+// ===== 3. FORM TẠO KHÓA HỌC =====
 exports.showCreateCourse = (req, res) => {
     res.render('teacher/create-course');
 };
 
-// ===== 4. TẠO KHÓA HỌC (Xử lý lưu vào DB) =====
+// ===== 4. TẠO KHÓA HỌC =====
 exports.createCourse = (req, res) => {
     const { title, description, price, category } = req.body;
     const teacherId = req.session.user.id;
 
-    const sql = "INSERT INTO courses (title, description, price, category, teacher_id) VALUES (?, ?, ?, ?, ?)";
-    db.query(sql, [title, description, price, category, teacherId], (err, result) => {
+    const sql = `
+        INSERT INTO courses (title, description, price, category, teacher_id) 
+        VALUES (?, ?, ?, ?, ?)
+    `;
+
+    db.query(sql, [title, description, price, category, teacherId], (err) => {
         if (err) {
             console.error(err);
             return res.send('Không thể tạo khóa học');
@@ -55,9 +64,10 @@ exports.createCourse = (req, res) => {
     });
 };
 
-// ===== 5. HỌC VIÊN (Danh sách học viên đã mua khóa học) =====
+// ===== 5. HỌC VIÊN =====
 exports.students = (req, res) => {
     const teacherId = req.session.user.id;
+
     const sql = `
         SELECT u.fullname, u.email, c.title AS courseName, o.created_at
         FROM orders o
@@ -75,12 +85,13 @@ exports.students = (req, res) => {
 // ===== 6. DOANH THU =====
 exports.revenue = (req, res) => {
     const teacherId = req.session.user.id;
+
     const sql = `
-        SELECT SUM(price) as dailyRevenue, DATE(created_at) as date
+        SELECT SUM(c.price) as dailyRevenue, DATE(o.created_at) as date
         FROM orders o
         JOIN courses c ON o.course_id = c.id
         WHERE c.teacher_id = ?
-        GROUP BY DATE(created_at)
+        GROUP BY DATE(o.created_at)
     `;
 
     db.query(sql, [teacherId], (err, results) => {
@@ -89,17 +100,26 @@ exports.revenue = (req, res) => {
     });
 };
 
-// ===== 7. ĐĂNG KÝ GIẢNG VIÊN (Nếu cần) =====
+// ===== 7. TRỞ THÀNH GIẢNG VIÊN =====
 exports.showBecomeTeacher = (req, res) => {
-    res.render('teacher/become-teacher');
+    res.render('client/become-teacher');
 };
 
+
 exports.becomeTeacher = (req, res) => {
+    // ❗ CHƯA LOGIN → ĐÁ VỀ LOGIN
+    if (!req.session.user) {
+        return res.redirect('/login');
+    }
+
     const userId = req.session.user.id;
+
     const sql = "UPDATE users SET role = 'teacher' WHERE id = ?";
-    db.query(sql, [userId], (err, result) => {
+
+    db.query(sql, [userId], (err) => {
         if (err) throw err;
-        req.session.user.role = 'teacher'; // Cập nhật session ngay lập tức
+
+        req.session.user.role = 'teacher';
         res.redirect('/teacher/dashboard');
     });
 };

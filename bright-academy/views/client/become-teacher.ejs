@@ -1,67 +1,127 @@
 <%- include('../layouts/header') %>
 
-<div class="container mt-5">
-  <h2 class="mb-4">Đăng ký trở thành giảng viên</h2>
+<style>
+  body {
+    background-color: #f5f7fb;
+  }
 
-  <form method="POST">
+   .form-wrapper {
+  min-height: calc(100vh - 160px); /* chừa chỗ cho header + footer */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 40px 0; /* 👈 QUAN TRỌNG */
+}
 
-    <!-- CÂU 1 -->
-    <div class="mb-4">
-      <h5>Bạn đã từng giảng dạy chưa?</h5>
+  .form-card {
+    width: 100%;
+    max-width: 700px;
+    background: white;
+    padding: 30px;
+margin: 40px 0;
+    border-radius: 12px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+  }
 
-      <div>
-        <input type="radio" name="teaching_exp" value="non-formal"> Trực tiếp, không chính thức
-      </div>
-      <div>
-        <input type="radio" name="teaching_exp" value="professional"> Trực tiếp, chuyên nghiệp
-      </div>
-      <div>
-        <input type="radio" name="teaching_exp" value="online"> Online
-      </div>
-      <div>
-        <input type="radio" name="teaching_exp" value="other"> Khác
-      </div>
-    </div>
+  .question-box {
+    border: 1px solid #e0e0e0;
+    padding: 20px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+  }
 
-    <!-- CÂU 2 -->
-    <div class="mb-4">
-      <h5>Bạn sản xuất video ở mức độ nào?</h5>
+  .question-title {
+    font-weight: 600;
+    margin-bottom: 10px;
+  }
+</style>
 
-      <div>
-        <input type="radio" name="video_exp" value="beginner"> Tôi là người mới
-      </div>
-      <div>
-        <input type="radio" name="video_exp" value="basic"> Tôi có một chút kiến thức
-      </div>
-      <div>
-        <input type="radio" name="video_exp" value="experienced"> Tôi có kinh nghiệm
-      </div>
-      <div>
-        <input type="radio" name="video_exp" value="ready"> Tôi có video sẵn sàng
-      </div>
-    </div>
+<div class="form-wrapper">
+  <div class="form-card">
 
-    <!-- CÂU 3 -->
-    <div class="mb-4">
-      <h5>Bạn có đối tượng người học không?</h5>
+<h3 class="mb-4 text-center fw-bold text-uppercase">
+  Đăng ký trở thành giảng viên
+</h3>
+    <form method="POST" action="/teacher/become-teacher">
 
-      <div>
-        <input type="radio" name="audience" value="none"> Không có
-      </div>
-      <div>
-        <input type="radio" name="audience" value="small"> Có một ít người theo dõi
-      </div>
-      <div>
-        <input type="radio" name="audience" value="large"> Có lượng lớn người theo dõi
-      </div>
-    </div>
+      <!-- CÂU 1 -->
+      <div class="question-box">
+        <div class="question-title">Bạn đã từng giảng dạy chưa?</div>
 
-    <!-- SUBMIT -->
-    <button class="btn btn-primary">
-      Gửi yêu cầu
-    </button>
+        <div class="form-check">
+          <input class="form-check-input" type="radio" name="teaching_exp" value="non-formal">
+          <label class="form-check-label">Trực tiếp, không chính thức</label>
+        </div>
 
-  </form>
+        <div class="form-check">
+          <input class="form-check-input" type="radio" name="teaching_exp" value="professional">
+          <label class="form-check-label">Trực tiếp, chuyên nghiệp</label>
+        </div>
+
+        <div class="form-check">
+          <input class="form-check-input" type="radio" name="teaching_exp" value="online">
+          <label class="form-check-label">Online</label>
+        </div>
+
+        <div class="form-check">
+          <input class="form-check-input" type="radio" name="teaching_exp" value="other">
+          <label class="form-check-label">Khác</label>
+        </div>
+      </div>
+
+      <!-- CÂU 2 -->
+      <div class="question-box">
+        <div class="question-title">Bạn sản xuất video ở mức độ nào?</div>
+
+        <div class="form-check">
+          <input class="form-check-input" type="radio" name="video_exp" value="beginner">
+          <label class="form-check-label">Tôi là người mới</label>
+        </div>
+
+        <div class="form-check">
+          <input class="form-check-input" type="radio" name="video_exp" value="basic">
+          <label class="form-check-label">Tôi có một chút kiến thức</label>
+        </div>
+
+        <div class="form-check">
+          <input class="form-check-input" type="radio" name="video_exp" value="experienced">
+          <label class="form-check-label">Tôi có kinh nghiệm</label>
+        </div>
+
+        <div class="form-check">
+          <input class="form-check-input" type="radio" name="video_exp" value="ready">
+          <label class="form-check-label">Tôi có video sẵn sàng</label>
+        </div>
+      </div>
+
+      <!-- CÂU 3 -->
+      <div class="question-box">
+        <div class="question-title">Bạn có đối tượng người học không?</div>
+
+        <div class="form-check">
+          <input class="form-check-input" type="radio" name="audience" value="none">
+          <label class="form-check-label">Không có</label>
+        </div>
+
+        <div class="form-check">
+          <input class="form-check-input" type="radio" name="audience" value="small">
+          <label class="form-check-label">Có một ít người theo dõi</label>
+        </div>
+
+        <div class="form-check">
+          <input class="form-check-input" type="radio" name="audience" value="large">
+          <label class="form-check-label">Có lượng lớn người theo dõi</label>
+        </div>
+      </div>
+
+      <!-- BUTTON -->
+      <button class="btn btn-primary w-100 mt-3">
+        Gửi yêu cầu
+      </button>
+
+    </form>
+
+  </div>
 </div>
 
 <%- include('../layouts/footer') %>

@@ -1,6 +1,17 @@
 const express = require('express');
 const router = express.Router();
+const authController = require('../controllers/authController');
 const teacherController = require('../controllers/teacherController');
+
+router.get('/login', authController.showLogin);
+router.post('/login', authController.login);
+
+// REGISTER
+router.get('/register', authController.showRegister);
+router.post('/register', authController.register);
+
+// LOGOUT
+router.get('/logout', authController.logout);
 
 // ===== ĐĂNG KÝ GIẢNG VIÊN =====
 router.get('/become-teacher', teacherController.showBecomeTeacher);

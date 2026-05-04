@@ -1,9 +1,9 @@
 const express = require('express');
 const session = require('express-session');
-const path = require('path');
 
 const authRoutes = require('./routes/auth');
 const teacherRoutes = require('./routes/teacher');
+const clientRoutes = require('./routes/client');
 
 const app = express();
 
@@ -12,7 +12,6 @@ app.set('view engine', 'ejs');
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static('public'));
 
-// ✅ SESSION (CHUẨN)
 app.use(session({
     secret: 'brightacademy',
     resave: false,
@@ -23,21 +22,16 @@ app.use(session({
     }
 }));
 
-// ✅ DEBUG SESSION
+// dùng cho header (login/logout)
 app.use((req, res, next) => {
-    console.log("SESSION USER:", req.session.user);
     res.locals.user = req.session.user || null;
     next();
 });
 
 // ROUTES
 app.use('/', authRoutes);
+app.use('/', clientRoutes);
 app.use('/teacher', teacherRoutes);
-
-// HOME
-app.get('/', (req, res) => {
-    res.render('client/home');
-});
 
 app.listen(3000, () => {
     console.log('Server chạy tại http://localhost:3000');
