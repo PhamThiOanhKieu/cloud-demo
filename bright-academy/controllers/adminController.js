@@ -1,49 +1,46 @@
-const db = require('../db');
+const db = require('../config/db');
 
-exports.dashboard = async (req,res)=>{
-
-    const [users] = await db.query(
-        'SELECT COUNT(*) AS totalUsers FROM users'
-    );
+exports.dashboard = async(req,res)=>{
 
     const [courses] = await db.query(
-        'SELECT COUNT(*) AS totalCourses FROM courses'
+
+        'SELECT * FROM courses'
+
     );
 
-    let totalOrders = 0;
+    const [users] = await db.query(
 
-    try{
+        "SELECT * FROM users WHERE role='student'"
 
-        const [orders] = await db.query(
-            'SELECT COUNT(*) AS totalOrders FROM orders'
-        );
+    );
 
-        totalOrders = orders[0].totalOrders;
+    const [teachers] = await db.query(
 
-    }catch(error){
+        "SELECT * FROM users WHERE role='teacher'"
 
-        totalOrders = 0;
-
-    }
+    );
 
     res.render('admin/dashboard',{
 
-        totalUsers: users[0].totalUsers,
+        totalUsers:users.length,
 
-        totalCourses: courses[0].totalCourses,
+        totalCourses:courses.length,
 
-        totalOrders
+        totalOrders:18,
+
+        totalRevenue:85000000,
+
+        totalTeachers:teachers.length
 
     });
 
 };
 
-exports.courses = async (req,res)=>{
+exports.courses = async(req,res)=>{
 
     const [courses] = await db.query(
 
-        `SELECT
-        courses.*,
+        `SELECT courses.*,
         users.fullname AS teacher_name
         FROM courses
         LEFT JOIN users
@@ -52,71 +49,114 @@ exports.courses = async (req,res)=>{
     );
 
     res.render('admin/courses',{
+
         courses
+
     });
 
 };
 
-// =====================
-// TRANG TẠO KHÓA HỌC
-// =====================
-exports.createCourse = async (req, res) => {
-  const title = req.body?.title;
-  const price = req.body?.price;
-  const description = req.body?.description;
+exports.showCreateCourse = async(req,res)=>{
 
-  const thumbnail = req.file ? req.file.filename : null;
+    const [teachers] = await db.query(
 
-  // 🔥 LẤY GIẢNG VIÊN TỪ SESSION
-  const teacher_id = req.session.user.id;
-  const teacher_name = req.session.user.fullname;
+        "SELECT * FROM users WHERE role='teacher'"
 
-  try {
-    await db.query(
-      `INSERT INTO courses 
-      (title, price, description, thumbnail, teacher_id, teacher_name) 
-      VALUES (?, ?, ?, ?, ?, ?)`,
-      [title, price, description, thumbnail, teacher_id, teacher_name]
     );
 
-    res.redirect('/admin/courses');
+    res.render('admin/create-course',{
 
-  } catch (err) {
-    console.log(err);
-    res.send('Lỗi tạo khóa học');
-  }
+        teachers
+
+    });
+
 };
-exports.editCoursePage = async (req,res)=>{
+
+exports.createCourse = async(req,res)=>{
+
+    try{
+
+        const {
+
+            title,
+
+            description,
+
+            price,
+
+            teacher_id
+
+        } = req.body;
+
+        await db.query(
+
+            `INSERT INTO courses
+            (
+                title,
+                description,
+                price,
+                teacher_id
+            )
+            VALUES(?,?,?,?)`,
+
+            [
+
+                title,
+
+                description,
+
+                price,
+
+                teacher_id
+
+            ]
+
+        );
+
+        res.redirect('/admin/courses');
+
+    }catch(error){
+
+        console.log(error);
+
+        res.send('Lỗi tạo khóa học');
+
+    }
+
+};
+
+exports.showEditCourse = async(req,res)=>{
 
     const id = req.params.id;
 
     const [courses] = await db.query(
-        'SELECT * FROM courses WHERE id=?',
-        [id]
-    );
 
-    const [teachers] = await db.query(
-        "SELECT * FROM users WHERE role='teacher'"
+        'SELECT * FROM courses WHERE id=?',
+
+        [id]
+
     );
 
     res.render('admin/editCourse',{
-        course: courses[0],
-        teachers
+
+        course:courses[0]
+
     });
 
 };
 
-exports.editCourse = async (req,res)=>{
+exports.updateCourse = async(req,res)=>{
 
     const id = req.params.id;
 
     const {
+
         title,
+
         description,
-        thumbnail,
-        price,
-        category,
-        teacher_id
+
+        price
+
     } = req.body;
 
     await db.query(
@@ -125,20 +165,19 @@ exports.editCourse = async (req,res)=>{
         SET
         title=?,
         description=?,
-        thumbnail=?,
-        price=?,
-        category=?,
-        teacher_id=?
+        price=?
         WHERE id=?`,
 
         [
+
             title,
+
             description,
-            thumbnail,
+
             price,
-            category,
-            teacher_id,
+
             id
+
         ]
 
     );
@@ -147,32 +186,39 @@ exports.editCourse = async (req,res)=>{
 
 };
 
-exports.deleteCourse = async (req,res)=>{
+exports.deleteCourse = async(req,res)=>{
 
     const id = req.params.id;
 
     await db.query(
+
         'DELETE FROM courses WHERE id=?',
+
         [id]
+
     );
 
     res.redirect('/admin/courses');
 
 };
 
-exports.users = async (req,res)=>{
+exports.users = async(req,res)=>{
 
     const [users] = await db.query(
-        'SELECT * FROM users'
+
+        "SELECT * FROM users WHERE role='student'"
+
     );
 
     res.render('admin/users',{
+
         users
+
     });
 
 };
 
-exports.teachers = async (req,res)=>{
+exports.teachers = async(req,res)=>{
 
     const [teachers] = await db.query(
 
@@ -188,13 +234,39 @@ exports.teachers = async (req,res)=>{
 
 };
 
-exports.orders = async (req,res)=>{
+exports.orders = (req,res)=>{
 
-    const [orders] = await db.query(
+    const orders = [
 
-        'SELECT * FROM orders'
+        {
 
-    );
+            id:1,
+
+            student:'Nguyễn Văn A',
+
+            course:'AWS Cloud',
+
+            total:1200000,
+
+            status:'Đã thanh toán'
+
+        },
+
+        {
+
+            id:2,
+
+            student:'Trần Thị B',
+
+            course:'Docker Master',
+
+            total:950000,
+
+            status:'Đã thanh toán'
+
+        }
+
+    ];
 
     res.render('admin/orders',{
 
@@ -204,13 +276,31 @@ exports.orders = async (req,res)=>{
 
 };
 
-exports.certificates = async (req,res)=>{
+exports.certificates = (req,res)=>{
 
-    const [certificates] = await db.query(
+    const certificates = [
 
-        'SELECT * FROM certificates'
+        {
 
-    );
+            student:'Nguyễn Văn A',
+
+            course:'AWS Cloud',
+
+            date:'2026-05-01'
+
+        },
+
+        {
+
+            student:'Trần Thị B',
+
+            course:'Docker Master',
+
+            date:'2026-05-02'
+
+        }
+
+    ];
 
     res.render('admin/certificates',{
 
@@ -220,13 +310,27 @@ exports.certificates = async (req,res)=>{
 
 };
 
-exports.banners = async (req,res)=>{
+exports.banners = (req,res)=>{
 
-    const [banners] = await db.query(
+    const banners = [
 
-        'SELECT * FROM banners'
+        {
 
-    );
+            title:'Khuyến mãi Cloud',
+
+            image:'/images/banner1.jpg'
+
+        },
+
+        {
+
+            title:'Giảm giá DevOps',
+
+            image:'/images/banner2.jpg'
+
+        }
+
+    ];
 
     res.render('admin/banners',{
 
@@ -236,245 +340,114 @@ exports.banners = async (req,res)=>{
 
 };
 
-exports.revenue = async (req,res)=>{
+exports.revenue = (req,res)=>{
 
-    const [revenue] = await db.query(
+    const revenues = [
 
-        'SELECT SUM(total_price) AS totalRevenue FROM orders'
+        {
 
-    );
+            month:'Tháng 1',
+
+            total:15000000
+
+        },
+
+        {
+
+            month:'Tháng 2',
+
+            total:23000000
+
+        },
+
+        {
+
+            month:'Tháng 3',
+
+            total:47000000
+
+        }
+
+    ];
 
     res.render('admin/revenue',{
 
-        totalRevenue: revenue[0].totalRevenue || 0
+        revenues
 
     });
 
 };
 
-exports.teacherApproval = async (req,res)=>{
+exports.teacherApproval = async(req,res)=>{
 
-    const [teachers] = await db.query(
+    const [requests] = await db.query(
 
-        "SELECT * FROM users WHERE role='teacher'"
+        `SELECT teacher_requests.*,
+        users.fullname,
+        users.email
+        FROM teacher_requests
+        LEFT JOIN users
+        ON teacher_requests.user_id = users.id`
 
     );
 
-    res.render('admin/teacherApproval',{
+    res.render('admin/teacher-approval',{
 
-        teachers
+        requests
 
     });
 
 };
 
-exports.deleteUser = async (req,res)=>{
+exports.approveTeacher = async(req,res)=>{
 
-    const id = req.params.id;
+    try{
 
-    await db.query(
-        'DELETE FROM users WHERE id=?',
-        [id]
-    );
+        const id = req.params.id;
 
-    res.redirect('/admin/users');
+        const [requests] = await db.query(
 
-};
+            'SELECT * FROM teacher_requests WHERE id=?',
 
-exports.blockUser = async (req,res)=>{
+            [id]
 
-    const id = req.params.id;
+        );
 
-    await db.query(
-        "UPDATE users SET status='blocked' WHERE id=?",
-        [id]
-    );
+        if(requests.length === 0){
 
-    res.redirect('/admin/users');
+            return res.send('Không tìm thấy yêu cầu');
 
-};
+        }
 
-exports.unblockUser = async (req,res)=>{
+        const userId = requests[0].user_id;
 
-    const id = req.params.id;
+        await db.query(
 
-    await db.query(
-        "UPDATE users SET status='active' WHERE id=?",
-        [id]
-    );
+            "UPDATE users SET role='teacher' WHERE id=?",
 
-    res.redirect('/admin/users');
+            [userId]
 
-};
+        );
 
-exports.makeTeacher = async (req,res)=>{
+        await db.query(
 
-    const id = req.params.id;
+            `UPDATE teacher_requests
+            SET status='approved'
+            WHERE id=?`,
 
-    await db.query(
-        "UPDATE users SET role='teacher' WHERE id=?",
-        [id]
-    );
+            [id]
 
-    res.redirect('/admin/users');
+        );
 
-};
-exports.teachers = async (req,res)=>{
+        res.redirect('/admin/teacher-approval');
 
-    const [teachers] = await db.query(
+    }catch(error){
 
-        "SELECT * FROM users WHERE role='teacher'"
+        console.log(error);
 
-    );
+        res.send('Lỗi duyệt giảng viên');
 
-    res.render('admin/teachers',{
-
-        teachers
-
-    });
+    }
 
 };
 
-exports.orders = async (req,res)=>{
-
-    const [orders] = await db.query(
-
-        'SELECT * FROM orders'
-
-    );
-
-    res.render('admin/orders',{
-
-        orders
-
-    });
-
-};
-
-exports.certificates = async (req,res)=>{
-
-    const [certificates] = await db.query(
-
-        'SELECT * FROM certificates'
-
-    );
-
-    res.render('admin/certificates',{
-
-        certificates
-
-    });
-
-};
-
-exports.banners = async (req,res)=>{
-
-    const [banners] = await db.query(
-
-        'SELECT * FROM banners'
-
-    );
-
-    res.render('admin/banners',{
-
-        banners
-
-    });
-
-};
-
-exports.revenue = async (req,res)=>{
-
-    const [revenue] = await db.query(
-
-        'SELECT SUM(total_price) AS totalRevenue FROM orders'
-
-    );
-
-    res.render('admin/revenue',{
-
-        totalRevenue: revenue[0].totalRevenue || 0
-
-    });
-
-};
-
-exports.teacherApproval = async (req,res)=>{
-
-    const [teachers] = await db.query(
-
-        "SELECT * FROM users WHERE role='teacher'"
-
-    );
-
-    res.render('admin/teacherApproval',{
-
-        teachers
-
-    });
-
-};
-// =====================
-// DASHBOARD
-// =====================
-exports.dashboard = (req, res) => {
-  res.send('Admin Dashboard');
-};
-
-// =====================
-// DANH SÁCH KHÓA HỌC
-// =====================
-exports.courses = async (req, res) => {
-  try {
-    const [courses] = await db.query("SELECT * FROM courses");
-    res.render('admin/courses', { courses });
-  } catch (err) {
-    console.log(err);
-    res.send('Lỗi load khóa học');
-  }
-};
-
-// =====================
-// PAGE TẠO KHÓA HỌC
-// =====================
-exports.createCoursePage = (req, res) => {
-  res.render('admin/create-course');
-};
-
-// khóa học chờ duyệt
-exports.pendingCourses = async (req, res) => {
-  const [courses] = await db.query(
-    "SELECT * FROM courses WHERE status='pending'"
-  );
-
-  res.render('admin/pending-courses', { courses });
-};
-
-// duyệt khóa học
-exports.approveCourse = async (req, res) => {
-  await db.query(
-    "UPDATE courses SET status='approved' WHERE id=?",
-    [req.params.id]
-  );
-
-  res.redirect('/admin/pending-courses');
-};
-
-// duyệt giảng viên
-exports.teacherApproval = async (req, res) => {
-  const [users] = await db.query(
-    "SELECT * FROM users WHERE teacher_request=1"
-  );
-
-  res.render('admin/teacher-approval', { users });
-};
-
-// duyệt giảng viên
-exports.approveTeacher = async (req, res) => {
-  await db.query(
-    "UPDATE users SET role='teacher', teacher_request=0 WHERE id=?",
-    [req.params.id]
-  );
-
-  res.redirect('/admin/teacher-approval');
-};

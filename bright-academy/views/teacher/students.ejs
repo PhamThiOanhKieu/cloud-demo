@@ -1,0 +1,21 @@
+<%- include('../layouts/header') %>
+
+<div class="container mt-4">
+    <h3>Học viên</h3>
+
+    <table class="table">
+        <tr>
+            <th>Tên</th>
+            <th>Khóa học</th>
+        </tr>
+
+        <% students.forEach(s => { %>
+            <tr>
+                <td><%= s.fullname %></td>
+                <td><%= s.title %></td>
+            </tr>
+        <% }) %>
+    </table>
+</div>
+
+<%- include('../layouts/footer') %>

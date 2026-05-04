@@ -1,0 +1,23 @@
+<%- include('../layouts/header') %>
+
+<div class="container mt-4">
+    <h3>Doanh thu</h3>
+
+    <table class="table">
+        <tr>
+            <th>Khóa học</th>
+            <th>Số đơn</th>
+            <th>Doanh thu</th>
+        </tr>
+
+        <% data.forEach(d => { %>
+            <tr>
+                <td><%= d.title %></td>
+                <td><%= d.total_orders %></td>
+                <td><%= d.revenue || 0 %> đ</td>
+            </tr>
+        <% }) %>
+    </table>
+</div>
+
+<%- include('../layouts/footer') %>

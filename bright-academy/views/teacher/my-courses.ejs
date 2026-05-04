@@ -1,0 +1,31 @@
+<%- include('../layouts/header') %>
+
+<div class="container mt-4">
+
+    <h3>Khóa học của tôi</h3>
+
+    <a href="/teacher/create-course" class="btn btn-success mb-3">
+        + Tạo khóa học
+    </a>
+
+    <table class="table">
+
+        <tr>
+            <th>ID</th>
+            <th>Tên</th>
+            <th>Giá</th>
+        </tr>
+
+        <% courses.forEach(course => { %>
+            <tr>
+                <td><%= course.id %></td>
+                <td><%= course.title %></td>
+                <td><%= course.price %>đ</td>
+            </tr>
+        <% }) %>
+
+    </table>
+
+</div>
+
+<%- include('../layouts/footer') %>

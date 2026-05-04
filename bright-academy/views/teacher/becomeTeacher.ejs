@@ -1,0 +1,176 @@
+<%- include('../layouts/header') %>
+
+<div class="container py-5">
+
+    <div class="card shadow border-0 p-5">
+
+        <h1 class="mb-4 text-center">
+
+            Trở thành giảng viên Bright Academy
+
+        </h1>
+
+        <p class="text-center text-muted mb-5">
+
+            Chia sẻ kiến thức của bạn và tạo khóa học online chuyên nghiệp.
+
+        </p>
+
+        <form method="POST">
+
+            <div class="mb-5">
+
+                <h4 class="mb-3">
+
+                    Bạn đã từng thực hiện hình thức giảng dạy nào trước đây?
+
+                </h4>
+
+                <select
+                    name="teaching_experience"
+                    class="form-select"
+                    required
+                >
+
+                    <option value="">
+
+                        Chọn câu trả lời
+
+                    </option>
+
+                    <option>
+
+                        Trực tiếp, không chính thức
+
+                    </option>
+
+                    <option>
+
+                        Trực tiếp, chuyên nghiệp
+
+                    </option>
+
+                    <option>
+
+                        Online
+
+                    </option>
+
+
+                    <option>
+
+                        Ý khác
+
+                    </option>
+
+                </select>
+
+            </div>
+
+            <div class="mb-5">
+
+                <h4 class="mb-3">
+
+                    Bạn sản xuất video "chuyên nghiệp" ở mức độ nào?
+
+                </h4>
+
+                <select
+                    name="video_experience"
+                    class="form-select"
+                    required
+                >
+
+                    <option value="">
+
+                        Chọn câu trả lời
+
+                    </option>
+
+                    <option>
+
+                        Tôi là người mới
+
+                    </option>
+
+                    <option>
+
+                        Tôi có một chút kiến thức
+
+                    </option>
+
+                    <option>
+
+                        Tôi có kinh nghiệm
+
+                    </option>
+
+                    <option>
+
+                        Tôi có video sẵn sàng để tải lên
+
+                    </option>
+
+                </select>
+
+            </div>
+
+            <div class="mb-5">
+
+                <h4 class="mb-3">
+
+                    Bạn có đối tượng để chia sẻ khóa học của mình không?
+
+                </h4>
+
+                <select
+                    name="audience_size"
+                    class="form-select"
+                    required
+                >
+
+                    <option value="">
+
+                        Chọn câu trả lời
+
+                    </option>
+
+                    <option>
+
+                        Không phải lúc này
+
+                    </option>
+
+                    <option>
+
+                        Tôi có một lượng người theo dõi nhỏ
+
+                    </option>
+
+                    <option>
+
+                        Tôi có lượng người theo dõi khá lớn
+
+                    </option>
+
+                </select>
+
+            </div>
+
+            <div class="text-center">
+
+                <button class="btn btn-primary btn-lg px-5">
+
+                    Gửi yêu cầu
+
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+<%- include('../layouts/footer') %>

@@ -1,127 +1,88 @@
 const db = require('../config/db');
-const bcrypt = require('bcrypt');
 
-// =====================
-// LOGIN PAGE
-// =====================
-exports.loginPage = (req, res) => {
-  res.render('auth/login');
+// ===== LOGIN =====
+exports.showLogin = (req, res) => {
+    res.render('auth/login');
 };
 
-// =====================
-// LOGIN
-// =====================
-exports.login = async (req, res) => {
-  console.log("LOGIN CONTROLLER HIT");
+exports.login = (req, res) => {
+    const { email, password } = req.body;
 
-  const { email, password } = req.body;
+    db.query(
+        "SELECT * FROM users WHERE email=? AND password=?",
+        [email, password],
+        (err, results) => {
 
-  try {
-    const [users] = await db.query(
-      'SELECT * FROM users WHERE email = ?',
-      [email]
+            if (err) return res.send('Lỗi DB');
+
+            if (results.length === 0) {
+                return res.send('Sai tài khoản hoặc mật khẩu');
+            }
+
+            const user = results[0];
+
+            req.session.user = user;
+
+            console.log("LOGIN OK:", user);
+
+            if (user.role === 'admin') return res.redirect('/admin');
+            if (user.role === 'teacher') return res.redirect('/teacher/dashboard');
+
+            return res.redirect('/');
+        }
     );
-
-    if (users.length === 0) {
-      return res.render('auth/result', {
-        message: 'Sai email hoặc mật khẩu!',
-        type: 'error',
-        redirectUrl: '/login',
-        buttonText: 'Thử lại'
-      });
-    }
-
-    const user = users[0];
-
-    const isMatch = await bcrypt.compare(password, user.password);
-
-    if (!isMatch) {
-      return res.render('auth/result', {
-        message: 'Sai email hoặc mật khẩu!',
-        type: 'error',
-        redirectUrl: '/login',
-        buttonText: 'Thử lại'
-      });
-    }
-
-    // ✅ LƯU SESSION CHUẨN
-req.session.user = {
-  id: user.id,
-  email: user.email,
-  role: user.role,
-  fullname: user.fullname
-};
-    // ✅ BẮT BUỘC save trước khi redirect
-    req.session.save((err) => {
-      if (err) {
-        console.log(err);
-        return res.send('Lỗi lưu session');
-      }
-
-      console.log("SESSION SAU LOGIN:", req.session.user);
-
-      res.redirect('/');
-    });
-
-  } catch (err) {
-    console.log(err);
-    res.send('Lỗi server');
-  }
 };
 
-// =====================
-// REGISTER PAGE
-// =====================
-exports.registerPage = (req, res) => {
-  res.render('auth/register');
+// ===== REGISTER =====
+exports.showRegister = (req, res) => {
+    res.render('auth/register');
 };
 
-// =====================
-// REGISTER
-// =====================
-exports.register = async (req, res) => {
-  const { fullname, email, password } = req.body;
+exports.register = (req, res) => {
 
-  try {
-    const [existing] = await db.query(
-      'SELECT * FROM users WHERE email = ?',
-      [email]
+    const { fullname, email, password } = req.body;
+
+    db.query(
+        "INSERT INTO users (fullname, email, password, role) VALUES (?, ?, ?, 'student')",
+        [fullname, email, password],
+        (err) => {
+
+            if (err) {
+                console.log(err);
+                return res.send('Email đã tồn tại');
+            }
+
+            res.redirect('/login');
+        }
     );
-
-    if (existing.length > 0) {
-      return res.render('auth/result', {
-        message: 'Email đã tồn tại! Vui lòng đăng nhập.',
-        type: 'error',
-        redirectUrl: '/login',
-        buttonText: 'Đăng nhập'
-      });
-    }
-
-    const hashedPassword = await bcrypt.hash(password, 10);
-
-    await db.query(
-      'INSERT INTO users (fullname, email, password, role) VALUES (?, ?, ?, ?)',
-      [fullname, email, hashedPassword, 'user']
-    );
-
-    return res.render('auth/result', {
-      message: 'Đăng ký thành công!',
-      type: 'success',
-      redirectUrl: '/login',
-      buttonText: 'Đăng nhập'
-    });
-
-  } catch (err) {
-    console.log(err);
-    res.send('Lỗi server');
-  }
 };
 
-// =====================
-// LOGOUT
-// =====================
+// ===== LOGOUT =====
 exports.logout = (req, res) => {
-  req.session.destroy(() => {
-    res.redirect('/');
-  });
+    req.session.destroy(() => {
+        res.redirect('/login');
+    });
+};
+// ===== REGISTER =====
+exports.showRegister = (req, res) => {
+    res.render('auth/register');
+};
+
+exports.register = (req, res) => {
+
+    const { fullname, email, password } = req.body;
+
+    db.query(
+        "INSERT INTO users (fullname, email, password, role) VALUES (?, ?, ?, 'student')",
+        [fullname, email, password],
+        (err) => {
+
+            if (err) {
+                console.log(err);
+                return res.send('Email đã tồn tại');
+            }
+
+            res.redirect('/login');
+        }
+    );
 };

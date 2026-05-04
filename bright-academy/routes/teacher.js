@@ -1,16 +1,14 @@
 const express = require('express');
 const router = express.Router();
-const db = require('../config/db');
-const { isTeacher } = require('../middleware/auth');
+const teacherController = require('../controllers/teacherController');
 
-// dashboard teacher
-router.get('/teacher', isTeacher, async (req, res) => {
-  const [courses] = await db.query(
-    "SELECT * FROM courses WHERE teacher_id=?",
-    [req.session.user.id]
-  );
+// 👇 QUAN TRỌNG (bị mất lúc nãy)
+router.get('/become-teacher', teacherController.showBecomeTeacher);
+router.post('/become-teacher', teacherController.becomeTeacher);
 
-  res.render('teacher/dashboard', { courses });
-});
+// các route khác
+router.get('/dashboard', teacherController.dashboard);
+router.get('/students', teacherController.students);
+router.get('/revenue', teacherController.revenue);
 
 module.exports = router;

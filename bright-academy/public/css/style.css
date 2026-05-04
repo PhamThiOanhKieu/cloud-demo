@@ -1,5 +1,148 @@
-body{
+/* ===== RESET ===== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
 
-    background:#f5f7fb;
+html, body {
+    height: 100%;
+    font-family: Arial, sans-serif;
+    background: #f1f5f9;
+}
+
+/* ===== PAGE LAYOUT ===== */
+.page {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* ===== MAIN DASHBOARD ===== */
+.dashboard {
+    flex: 1;
+    display: flex;
+}
+
+/* ===== SIDEBAR ===== */
+.sidebar {
+    width: 250px;
+    background: #0f172a;
+    color: white;
+    padding: 20px;
+}
+
+.sidebar h4 {
+    font-weight: bold;
+    margin-bottom: 30px;
+}
+
+/* MENU */
+.sidebar .menu a {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    padding: 12px 15px;
+    margin-bottom: 10px;
+
+    color: #cbd5e1;
+    text-decoration: none;
+
+    border-radius: 10px;
+    transition: 0.2s;
+}
+
+/* ICON */
+.sidebar .menu i {
+    width: 20px;
+}
+
+/* HOVER */
+.sidebar .menu a:hover {
+    background: #1e293b;
+    color: white;
+}
+
+/* ACTIVE */
+.sidebar .menu a.active {
+    background: #2563eb;
+    color: white;
+}
+
+/* LOGOUT */
+.sidebar .menu a.logout {
+    margin-top: 20px;
+    color: #f87171;
+}
+
+.sidebar .menu a.logout:hover {
+    background: #7f1d1d;
+    color: white;
+}
+
+/* ===== CONTENT ===== */
+.content {
+    flex: 1;
+    padding: 20px;
+    background: #f1f5f9;
+}
+
+/* ===== TOPBAR ===== */
+.topbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+/* ===== CARD ===== */
+.card-box {
+    background: white;
+    padding: 20px;
+    border-radius: 12px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+/* ===== TABLE ===== */
+.table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.table th, .table td {
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+}
+
+/* ===== BUTTON ===== */
+.btn-primary {
+    background: #2563eb;
+    color: white;
+    padding: 8px 15px;
+    border-radius: 8px;
+    text-decoration: none;
+}
+
+.btn-primary:hover {
+    background: #1d4ed8;
+}
+
+/* ===== FOOTER FIX (QUAN TRỌNG) ===== */
+footer {
+    margin-top: auto;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 768px) {
+
+    .dashboard {
+        flex-direction: column;
+    }
+
+    .sidebar {
+        width: 100%;
+    }
 
 }

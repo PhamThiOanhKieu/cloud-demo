@@ -1,16 +1,23 @@
 const express = require('express');
 const router = express.Router();
-const authController = require('../controllers/authController');
+const teacherController = require('../controllers/teacherController');
 
-// login
-router.get('/login', authController.loginPage);
-router.post('/login', authController.login);
+// ===== ĐĂNG KÝ GIẢNG VIÊN =====
+router.get('/become-teacher', teacherController.showBecomeTeacher);
+router.post('/become-teacher', teacherController.becomeTeacher);
 
-// register
-router.get('/register', authController.registerPage);
-router.post('/register', authController.register);
+// ===== DASHBOARD =====
+router.get('/dashboard', teacherController.dashboard);
 
-// logout
-router.get('/logout', authController.logout);
+// ===== HỌC VIÊN =====
+router.get('/students', teacherController.students);
+
+// ===== DOANH THU =====
+router.get('/revenue', teacherController.revenue);
+
+// ===== KHÓA HỌC (nếu bạn đã làm) =====
+router.get('/my-courses', teacherController.myCourses);
+router.get('/create-course', teacherController.showCreateCourse);
+router.post('/create-course', teacherController.createCourse);
 
 module.exports = router;
